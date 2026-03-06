@@ -237,12 +237,12 @@ body {
     background-color: transparent !important;
 }
 
-.menunggu { background: #fef3c7; color: #ced717; }
+.menunggu { background: #6c6c63; color: #f6ff00; }
 .disetujui { background: #dcfce7; color: #166534; }
 .ditolak { background: #fee2e2; color: #991b1b; }
 
 .status-pill {
-    font-weight: 800;
+        font-weight: 800;
 }
 
 .status-pill {
