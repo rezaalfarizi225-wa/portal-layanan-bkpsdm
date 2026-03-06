@@ -83,14 +83,15 @@
 
         try {
             // URL Google Apps Script Anda
-            const webAppUrl = "https://script.google.com/macros/s/AKfycbx7xZaVe4zJ61-6OZ0t84VEhqzWM9KIF-3eo0aBfc-iUvKy1BuUryMjzvGNKgpO0APp/exec";
+            const webAppUrl = "https://script.google.com/macros/s/AKfycby81TWLHIIxw0rm-hKQaRv5srpy5adbpPPjZHhNSNjUVL2Bf_63W_Kcl99jy_AI3g8J/exec";
             const response = await fetch(webAppUrl);
             const data = await response.json();
-
-            const user = data.find(row => 
-                row["Nama Lengkap"]?.toString().toLowerCase().includes(nama) && 
-                row["Nomor Induk Siswa (NIS) / Nomor Induk Mahasiswa (NIM)"]?.toString() === npm
-            );
+            // Tambahkan .reverse() sebelum .find() untuk mencari dari data yang paling baru
+const user = data.reverse().find(row => 
+    row["Nama Lengkap"]?.toString().toLowerCase().includes(nama) && 
+    row["Nomor Induk Siswa (NIS) / Nomor Induk Mahasiswa (NIM)"]?.toString() === npm
+);
+           
 
             if (user) {
                 resBox.style.display = 'block';
