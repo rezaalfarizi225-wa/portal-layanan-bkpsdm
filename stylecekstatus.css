@@ -7,19 +7,68 @@
     --white: #ffffff;
 }
 
+/* Base Style */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body { 
     font-family: 'Plus Jakarta Sans', sans-serif; 
-    background: radial-gradient(circle at top right, #e2e8f0, #f8fafc);
     min-height: 100vh;
     display: flex; 
     align-items: center;
     justify-content: center; 
     padding: 20px; 
     color: var(--text-main);
-   }
+    background-color: transparent !important;
+}
 
+/* Background Animation */
+.area {
+    background: #f4f7fb;  
+    background: linear-gradient(to left, #84d9e3, #84d2d8);  
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.circles {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    margin: 0; padding: 0;
+}
+
+.circles li {
+    position: absolute;
+    display: block;
+    list-style: none;
+    width: 20px; height: 20px;
+    background: rgba(4, 48, 82, 0.1);
+    animation: animate 25s linear infinite;
+    bottom: -150px;
+}
+
+/* Circles Variation */
+.circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
+.circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
+.circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
+.circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
+.circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
+.circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
+.circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
+.circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
+.circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
+.circles li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
+
+@keyframes animate {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; }
+    100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; }
+}
+
+/* Layout Card */
 .card { 
     background: var(--white); 
     padding: 2.5rem; 
@@ -29,29 +78,29 @@ body {
     max-width: 480px;
     border: 1px solid rgba(226, 232, 240, 0.8);
     transition: transform 0.3s ease;
-    
+    position: relative;
+    z-index: 1;
 }
 
-.header-section { text-align: center; margin-bottom: 2rem; }
-
-.logo-placeholder {
-    width: 60px;
-    height: 60px;
-    background: var(--primary);
-    border-radius: 16px;
-    margin: 0 auto 1rem;
+.header-section { 
+    text-align: center; 
+    margin-bottom: 2rem; 
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: bold;
-    font-size: 1.5rem;
-    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+}
+
+.logo-instansi {
+    width: auto;
+    height: 85px;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
 }
 
 h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
 p.subtitle { color: var(--text-muted); font-size: 0.95rem; }
 
+/* Form Components */
 .form-group { margin-bottom: 1.25rem; }
 
 label { 
@@ -80,8 +129,14 @@ input:focus {
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
 }
 
+.g-recaptcha {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
 button { 
-    width: 85%; 
+    width: 100%; 
     padding: 14px; 
     background: var(--primary); 
     color: white; 
@@ -100,9 +155,9 @@ button:hover {
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
-button:active { transform: translateY(0); }
 button:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
 
+/* Result Components - Centered */
 #resultBox { 
     margin-top: 2rem; 
     padding: 1.5rem; 
@@ -110,6 +165,7 @@ button:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
     background: #f8fafc;
     border: 1px dashed #e2e8f0;
     display: none; 
+    text-align: center;
     animation: slideUp 0.4s ease-out;
 }
 
@@ -118,9 +174,28 @@ button:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.result-item { margin-bottom: 12px; }
-.result-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 700; }
-.result-value { font-weight: 600; font-size: 1rem; color: var(--text-main); }
+.result-item { 
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.result-label { 
+    font-size: 0.75rem; 
+    text-transform: uppercase; 
+    letter-spacing: 0.05em; 
+    color: var(--text-muted); 
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.result-value { 
+    font-weight: 700; 
+    font-size: 1.1rem; 
+    color: var(--text-main); 
+    text-transform: capitalize;
+}
 
 .status-pill { 
     display: inline-flex; 
@@ -128,11 +203,12 @@ button:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
     padding: 6px 16px; 
     border-radius: 10px; 
     font-size: 0.85rem; 
-    font-weight: 700; 
+    font-weight: 800; 
+    text-transform: uppercase;
     margin-top: 4px; 
 }
 
-.menunggu { background: #fef3c7; color: #ced717; }
+.menunggu { background: #6c6c63; color: #f6ff00; }
 .disetujui { background: #dcfce7; color: #166534; }
 .ditolak { background: #fee2e2; color: #991b1b; }
 
@@ -155,96 +231,43 @@ button:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
     color: var(--text-muted); 
 }
 
-/* Ganti .logo-placeholder dengan ini */
-.logo-instansi {
-    width: auto;
-    height: 85px; /* Sesuaikan tinggi logo agar pas */
-    margin-bottom: 1.5rem;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); /* Memberikan efek bayangan lembut pada logo */
-}
-
-/* Tambahan: Pastikan header section tetap rata tengah */
-.header-section {
-    text-align: center;
-    margin-bottom: 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Area kontainer background */
-.area {
-    background: #f4f7fb;  
-    background: -webkit-linear-gradient(to left, #8f94fb, #4e54c8);  
-    width: 100%;
-    height: 100vh;
-    position: fixed; /* Tetap di belakang saat di-scroll */
-    top: 0;
-    left: 0;
-    z-index: -1; /* Di belakang semua elemen */
-}
-
-.circles {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-}
-
-.circles li {
-    position: absolute;
-    display: block;
-    list-style: none;
-    width: 20px;
-    height: 20px;
-    background: rgba(30, 96, 145, 0.1); /* Warna biru transparan sesuai tema BKPSDM */
-    animation: animate 25s linear infinite;
-    bottom: -150px;
-}
-
-/* Variasi ukuran dan posisi lingkaran */
-.circles li:nth-child(1) { left: 25%; width: 80px; height: 80px; animation-delay: 0s; }
-.circles li:nth-child(2) { left: 10%; width: 20px; height: 20px; animation-delay: 2s; animation-duration: 12s; }
-.circles li:nth-child(3) { left: 70%; width: 20px; height: 20px; animation-delay: 4s; }
-.circles li:nth-child(4) { left: 40%; width: 60px; height: 60px; animation-delay: 0s; animation-duration: 18s; }
-.circles li:nth-child(5) { left: 65%; width: 20px; height: 20px; animation-delay: 0s; }
-.circles li:nth-child(6) { left: 75%; width: 110px; height: 110px; animation-delay: 3s; }
-.circles li:nth-child(7) { left: 35%; width: 150px; height: 150px; animation-delay: 7s; }
-.circles li:nth-child(8) { left: 50%; width: 25px; height: 25px; animation-delay: 15s; animation-duration: 45s; }
-.circles li:nth-child(9) { left: 20%; width: 15px; height: 15px; animation-delay: 2s; animation-duration: 35s; }
-.circles li:nth-child(10) { left: 85%; width: 150px; height: 150px; animation-delay: 0s; animation-duration: 11s; }
-
-/* Keyframes untuk animasi melayang dan berputar */
-@keyframes animate {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-        border-radius: 0;
+/* Responsive Adjustment untuk HP */
+@media (max-width: 480px) {
+    body {
+        padding: 10px; /* Mengurangi jarak tepi layar */
     }
-    100% {
-        transform: translateY(-1000px) rotate(720deg);
-        opacity: 0;
-        border-radius: 50%;
+
+    .card {
+        padding: 1.5rem; /* Mengurangi padding dalam card agar konten tidak sesak */
+        border-radius: 20px;
     }
-}
 
-/* Memastikan body tetap transparan agar background terlihat */
-body {
-    background-color: transparent !important;
-}
+    h2 {
+        font-size: 1.25rem; /* Mengecilkan ukuran judul sedikit */
+    }
 
-.menunggu { background: #6c6c63; color: #f6ff00; }
-.disetujui { background: #dcfce7; color: #166534; }
-.ditolak { background: #fee2e2; color: #991b1b; }
+    .logo-instansi {
+        height: 65px; /* Mengecilkan logo sedikit agar tidak memakan ruang */
+    }
 
-.status-pill {
-        font-weight: 800;
-}
+    input, button {
+        padding: 12px; /* Menyesuaikan ukuran input agar nyaman di jari */
+        font-size: 0.95rem;
+    }
 
-.status-pill {
-    text-transform: uppercase;
+    .result-value {
+        font-size: 1rem; /* Menyesuaikan teks hasil agar tidak terpotong */
+    }
+
+    .status-pill {
+        width: 100%; /* Membuat pill status melebar penuh agar teks panjang tidak tumpah */
+        justify-content: center;
+    }
+
+    .g-recaptcha {
+        transform: scale(0.85); /* Mengecilkan ukuran reCAPTCHA agar tidak keluar dari kotak */
+        -webkit-transform: scale(0.85);
+        transform-origin: center;
+        -webkit-transform-origin: center;
+    }
 }

@@ -6,9 +6,9 @@
     <title>Portal Cek Status Magang & PKL</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="stylecekstatus.css">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
- <body>
     <div class="area">
         <ul class="circles">
             <li></li><li></li><li></li><li></li><li></li>
@@ -17,118 +17,118 @@
         </ul>
     </div>
 
-    <nav class="navbar">
+    <nav class="navbar"></nav>
 
-<div class="card">
-    <div class="header-section">
+    <div class="card">
         <div class="header-section">
-    <img src='logo_tegal.png' alt="Logo BKPSDM" class="logo-instansi">
-    
-        <h2>Cek Status Pengajuan</h2>
-        <p class="subtitle">Silakan masukkan data pendaftaran Anda</p>
-    </div>
-
-    <div class="form-group">
-        <label for="inputNama">Nama Lengkap</label>
-        <input type="text" id="inputNama" placeholder="Contoh: Budi Santoso" autocomplete="off">
-    </div>
-
-    <div class="form-group">
-        <label for="inputNPM">NPM / NIS</label>
-        <input type="text" id="inputNPM" placeholder="Masukkan nomor induk" autocomplete="off">
-    </div>
-
-    <button id="btnCek" onclick="cariData()">Periksa Status Sekarang</button>
-    <div id="loader" class="loader"></div>
-
-    <div id="resultBox">
-        <div class="result-item">
-            <div class="result-label">Nama Peserta</div>
-            <div id="resNama" class="result-value">-</div>
-        </div>
-        
-        <div class="result-item">
-            <div class="result-label">Institusi</div>
-            <div id="resKampus" class="result-value">-</div>
+            <img src='logo_tegal.png' alt="Logo BKPSDM" class="logo-instansi">
+            <h2>Cek Status Pengajuan</h2>
+            <p class="subtitle">Silakan masukkan data pendaftaran Anda</p>
         </div>
 
-        <div class="result-item">
-            <div class="result-label">Status Terakhir</div>
-            <div id="resStatus" class="status-pill">-</div>
+        <div class="form-group">
+            <label for="inputNama">Nama Lengkap</label>
+            <input type="text" id="inputNama" placeholder="Contoh: Budi Santoso" autocomplete="off">
         </div>
-        
-        <div id="resWaktu" style="font-size: 0.7rem; color: #94a3b8; margin-top: 1rem; border-top: 1px solid #e2e8f0; padding-top: 8px;"></div>
+
+        <div class="form-group">
+            <label for="inputNPM">NPM / NIS</label>
+            <input type="text" id="inputNPM" placeholder="Masukkan nomor induk" autocomplete="off">
+        </div>
+
+        <div class="g-recaptcha" data-sitekey="6LcCRYgsAAAAAIpnYWD-6R2EHVuB7aYUy8h1-U37" style="margin-bottom: 20px; display: flex; justify-content: center;"></div>
+
+        <button id="btnCek" onclick="cariData()">Periksa Status Sekarang</button>
+        <div id="loader" class="loader"></div>
+
+        <div id="resultBox">
+            <div class="result-item">
+                <div class="result-label">Nama Peserta</div>
+                <div id="resNama" class="result-value">-</div>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">Jurusan / Prodi</div>
+                <div id="resProdi" class="result-value">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Institusi</div>
+                <div id="resKampus" class="result-value">-</div>
+            </div>
+
+            <div class="result-item">
+                <div class="result-label">Status Terakhir</div>
+                <div id="resStatus" class="status-pill">-</div>
+            </div>
+            
+            <div id="resWaktu" style="font-size: 0.7rem; color: #94a3b8; margin-top: 1rem; border-top: 1px solid #e2e8f0; padding-top: 8px;"></div>
+        </div>
+
+        <p class="footer-note">Hubungi bagian administrasi jika data tidak ditemukan.</p>
     </div>
 
-    <p class="footer-note">Hubungi bagian administrasi jika data tidak ditemukan.</p>
-</div>
-
-<script>
+    <script>
     async function cariData() {
-        const nama = document.getElementById('inputNama').value.trim().toLowerCase();
-        const npm = document.getElementById('inputNPM').value.trim();
-        const btn = document.getElementById('btnCek');
-        const loader = document.getElementById('loader');
-        const resBox = document.getElementById('resultBox');
+    const nama = document.getElementById('inputNama').value.trim();
+    const npm = document.getElementById('inputNPM').value.trim();
+    const captcha = grecaptcha.getResponse();
+    
+    const btn = document.getElementById('btnCek');
+    const resBox = document.getElementById('resultBox');
 
-        if (!nama || !npm) {
-            alert("Harap isi Nama dan NPM!");
-            return;
+    if (!nama || !npm) return alert("Isi Nama dan NPM!");
+    if (!captcha) return alert("Centang reCAPTCHA!");
+
+    btn.disabled = true;
+    btn.innerText = "Memproses...";
+    resBox.style.display = 'none';
+
+    try {
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbxMcrjsUg754eXbg8Z6ODiSU0dWA0lvQoPHgdR_ME-D3jQZP_QoepXwKk3cWV-pMb0z/exec";
+
+        // Mengirim data menggunakan metode POST agar tidak terkena limit karakter URL
+        const response = await fetch(webAppUrl, {
+            method: 'POST',
+            body: JSON.stringify({
+                nama: nama,
+                npm: npm,
+                captcha: captcha
+            })
+        });
+
+        const res = await response.json();
+
+        if (res.status === "success") {
+            resBox.style.display = 'block';
+            document.getElementById('resNama').innerText = res.data.nama;
+            document.getElementById('resProdi').innerText = res.data.prodi || "-";
+            document.getElementById('resKampus').innerText = res.data.institusi;
+            
+            const st = document.getElementById('resStatus');
+            st.innerText = res.data.status;
+            st.className = 'status-pill';
+            
+            const s = res.data.status.toLowerCase();
+            if (s.includes('setuju') || s.includes('terima')) st.classList.add('disetujui');
+            else if (s.includes('tolak')) st.classList.add('ditolak');
+            else st.classList.add('menunggu');
+
+            document.getElementById('resWaktu').innerText = "Update: " + res.data.update;
+        } else {
+            alert(res.message);
         }
-
-        btn.disabled = true;
-        btn.innerText = "Mencari...";
-        loader.style.display = 'block';
-        resBox.style.display = 'none';
-
-        try {
-            // URL Google Apps Script Anda
-            const webAppUrl = "https://script.google.com/macros/s/AKfycby81TWLHIIxw0rm-hKQaRv5srpy5adbpPPjZHhNSNjUVL2Bf_63W_Kcl99jy_AI3g8J/exec";
-            const response = await fetch(webAppUrl);
-            const data = await response.json();
-            // Tambahkan .reverse() sebelum .find() untuk mencari dari data yang paling baru
-const user = data.reverse().find(row => 
-    row["Nama Lengkap"]?.toString().toLowerCase().includes(nama) && 
-    row["Nomor Induk Siswa (NIS) / Nomor Induk Mahasiswa (NIM)"]?.toString() === npm
-);
-           
-
-            if (user) {
-                resBox.style.display = 'block';
-                document.getElementById('resNama').innerText = user["Nama Lengkap"];
-                document.getElementById('resKampus').innerText = user["Asal Institusi Pendidikan"];
-                
-                const statusAktif = user["Status Terakhir"] || "Dalam Proses";
-                const resStatus = document.getElementById('resStatus');
-                resStatus.innerText = statusAktif;
-
-                resStatus.className = 'status-pill';
-
-const s = statusAktif.toLowerCase();
-
-if (s.includes('setujui') || s.includes('terima')) {
-    resStatus.classList.add('disetujui');
-} 
-else if (s.includes('tolak')) {
-    resStatus.classList.add('ditolak');
-} 
-else {
-    resStatus.classList.add('menunggu');
-}
-
-                document.getElementById('resWaktu').innerText = "Update terakhir: " + (user["Waktu Notifikasi"] || "-");
-            } else {
-                alert("Data tidak ditemukan. Pastikan Nama dan NPM sesuai.");
-            }
-        } catch (e) {
-            alert("Gagal mengambil data. Pastikan koneksi internet stabil.");
-        } finally {
-            btn.disabled = false;
-            btn.innerText = "Periksa Status Sekarang";
-            loader.style.display = 'none';
-        }
+    } catch (e) {
+        // Karena Apps Script melakukan redirect pada POST, jika muncul error CORS di localhost,
+        // data biasanya tetap terkirim. Namun untuk hasil terbaik, pastikan Deploy sudah "Anyone".
+        alert("Terjadi kesalahan sistem. Pastikan Apps Script sudah di-deploy dengan benar.");
+        console.error(e);
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "Periksa Status Sekarang";
+        grecaptcha.reset();
     }
-</script>
-
+}
+    </script>
 </body>
 </html>
